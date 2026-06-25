@@ -39,6 +39,7 @@ export default function App() {
   );
 
   const [selectedStore, setSelectedStore] = useState(null);
+  const [reportStore, setReportStore] = useState(null)
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   return (
@@ -109,7 +110,10 @@ export default function App() {
                     <StorePopup
                       store={store}
                       onClose={() => setSelectedStore(null)}
-                      onReport={() => setIsReportModalOpen(true)}
+                      onReport={() => {
+                        setReportStore(store)
+                        setIsReportModalOpen(true)
+                      }}
                     />
                   )}
                 </div>

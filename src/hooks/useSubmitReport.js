@@ -7,14 +7,19 @@ export function useSubmitReport() {
   return useMutation({
     mutationFn: async ({ storeId, productId, isAvailable }) => {
       const { data: { session } } = await supabase.auth.getSession()
+      if (!session) await supabase.auth.signInAnonymously()
+
+      const { data: { session: active } } = await supabase.auth.getSession()
+
       const { error } = await supabase
         .from('availability_reports')
         .insert({
           store_id:     storeId,
           product_id:   productId,
           is_available: isAvailable,
-          reported_by:  session?.user?.id ?? null,
+          reported_by:  active?.user?.id ?? null,
         })
+
       if (error) throw error
     },
     onSuccess: (_, variables) => {
